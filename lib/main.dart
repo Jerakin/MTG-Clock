@@ -3,7 +3,6 @@ import 'dart:html';
 import 'dart:js_util';
 import 'dart:async';
 import 'dart:math';
-import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
 
@@ -35,10 +34,6 @@ class HomeScreen extends StatefulWidget{
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class MyAppState extends ChangeNotifier {
-  bool isPaused = true;
 }
 
 
@@ -140,7 +135,6 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   Widget build(BuildContext context) {
     double pauseButtonDiameter = min(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) * 0.33;
-    var appState = context.watch<MyAppState>();
 
     return Center(
       child: Stack(
@@ -185,7 +179,7 @@ class _TimerScreenState extends State<TimerScreen> {
           Align(
             alignment: Alignment.center,
             child: ElevatedButton(
-              onPressed: () => {appState.isPaused = !appState.isPaused},
+              onPressed: () => {_currentPlayer = 0},
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(pauseButtonDiameter, pauseButtonDiameter),
                 shape: const CircleBorder(),
