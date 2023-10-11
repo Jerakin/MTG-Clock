@@ -90,9 +90,9 @@ class MyAppModel extends ChangeNotifier {
         int current = playerTimers.putIfAbsent(currentPlayer, () => 0);
         playerTimers.update(currentPlayer, (value) => current + 1);
 
-        // We don't need to notify our listeners about our state more than here
-        // as this is called every 100ms. I wonder if we should refactor the
-        // timer into it's own state that updates only the text?
+        // We don't need to notify our listeners when we pass turn as this is
+        // called every 100ms. I wonder if we should refactor the timer into
+        // it's own state that updates only the text?
         notifyListeners();
       },
     );
@@ -113,17 +113,33 @@ class MyAppSettings extends ChangeNotifier {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int currentScreenIndex = 0;
+  late Widget currentWidget;
+
   @override
   Widget build(BuildContext context) {
+    switch (currentScreenIndex) {
+      case 0:
+        currentWidget = const TimerScreen();
+      case 1:
+        currentWidget = const SettingsScreen();
+      default:
+        throw UnimplementedError();
+    }
+
     return Scaffold(
-      body: TimerScreen(),
+      body: currentWidget,
       floatingActionButton:
       Consumer<MyAppModel>(
         builder: (context, appModel, child) {
           return Visibility(
             visible: appModel.isPaused,
             child: FloatingActionButton(
-              onPressed: (){},
+              onPressed: (){
+                setState(() {
+                  currentScreenIndex = 1 - currentScreenIndex;
+                });
+              },
               child: const Icon(Icons.settings),
             )
           );
@@ -133,8 +149,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
 
 class TimerScreen extends StatelessWidget {
+  const TimerScreen({super.key});
+
   static const double _widgetMargin = 8;
 
   Expanded _playerIndicator(BuildContext context, MyAppModel appModel, playerNum) {
