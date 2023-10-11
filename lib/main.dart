@@ -58,7 +58,6 @@ class MyAppModel extends ChangeNotifier {
 
   void setActivePlayer(int i){
     currentPlayer = i;
-    notifyListeners();
   }
 
   String getPlayerTimeString(int i){
@@ -91,6 +90,9 @@ class MyAppModel extends ChangeNotifier {
         int current = playerTimers.putIfAbsent(currentPlayer, () => 0);
         playerTimers.update(currentPlayer, (value) => current + 1);
 
+        // We don't need to notify our listeners about our state more than here
+        // as this is called every 100ms. I wonder if we should refactor the
+        // timer into it's own state that updates only the text?
         notifyListeners();
       },
     );
