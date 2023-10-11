@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomeScreen(title: 'EDH Timer'),
+      home: MultiProvider(
+         providers: [
+           ChangeNotifierProvider(create: (context) => MyAppModel()),
+           ChangeNotifierProvider(create: (context) => MyAppSettings())
+         ],
+          child:const HomeScreen(title: 'EDH Timer')),
     );
   }
 }
@@ -36,46 +42,56 @@ class HomeScreen extends StatefulWidget{
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: TimerScreen(),
-      floatingActionButton:
-        Visibility(
-          visible: false,
-          child: FloatingActionButton(
-            onPressed: (){},
-            child: const Icon(Icons.settings),
-          )),
-    );
-  }
-}
-
-class TimerScreen extends StatefulWidget {
-  const TimerScreen({super.key});
-
-  @override
-  State<TimerScreen> createState() => _TimerScreenState();
-}
-
-class _TimerScreenState extends State<TimerScreen> {
+class MyAppModel extends ChangeNotifier {
   Map<int, int> playerTimers = HashMap();
-  int _currentPlayer = 0;
-  Timer? _timer;
-  static const double _widgetMargin = 8;
+  int currentPlayer = 0;
+  Timer? timer;
+  bool isPaused = true;
 
-  void _startTimer() {
+  void togglePaused(){
+    if (currentPlayer == 0){
+      return;
+    }
+    isPaused = !isPaused;
+    notifyListeners();
+  }
+
+  void setActivePlayer(int i){
+    currentPlayer = i;
+    notifyListeners();
+  }
+
+  String getPlayerTimeString(int i){
+    return _toTime(playerTimers[i] ?? 0);
+  }
+
+  void passTurn(int player){
+    if (timer == null){
+      startTimer();
+    }
+    // Change the player, if the current player is clicked pass it.
+    // If another player is clicked, set that player as current.
+    if (currentPlayer == player) {
+      setActivePlayer(modulo(currentPlayer, 4) + 1);
+    } else {
+      setActivePlayer(player);
+    }
+    isPaused = false;
+  }
+
+  void startTimer() {
     const oneSec = Duration(milliseconds: 100);
-    _timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        setState(() {
-          // Add a second to the current player
-          int current = playerTimers.putIfAbsent(_currentPlayer, () => 0);
-          playerTimers.update(_currentPlayer, (value) => current + 1);
-        });
+    timer = Timer.periodic(
+      oneSec, (Timer timer) {
+        if (isPaused) {
+          return;
+        }
+
+        // Add a second to the current player
+        int current = playerTimers.putIfAbsent(currentPlayer, () => 0);
+        playerTimers.update(currentPlayer, (value) => current + 1);
+
+        notifyListeners();
       },
     );
   }
@@ -88,46 +104,50 @@ class _TimerScreenState extends State<TimerScreen> {
 
     return '$minutes:$seconds.$milliseconds';
   }
+}
 
-  void _pause(){
-    setState(() {
-      _currentPlayer = 0;
-    });
+class MyAppSettings extends ChangeNotifier {
+
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TimerScreen(),
+      floatingActionButton:
+      Consumer<MyAppModel>(
+        builder: (context, appModel, child) {
+          return Visibility(
+            visible: appModel.isPaused,
+            child: FloatingActionButton(
+              onPressed: (){},
+              child: const Icon(Icons.settings),
+            )
+          );
+        }
+      )
+    );
   }
+}
 
-  void _passTurn(int player){
-    setState(() {
-      if (_timer == null){
-        // If no timer has been started it's a new game, set clicked player
-        //  as active and start the timer
-        _currentPlayer = player;
-        _startTimer();
-        return;
-      }
 
-      // Change the player, if the current player is clicked pass it.
-      // If another player is clicked, set that player as current.
-      if (_currentPlayer == player) {
-        _currentPlayer = modulo(_currentPlayer, 4) + 1;
-      } else {
-        _currentPlayer = player;
-      }
-    });
-  }
+class TimerScreen extends StatelessWidget {
+  static const double _widgetMargin = 8;
 
-  Expanded _playerIndicator(playerNum) {
+  Expanded _playerIndicator(BuildContext context, MyAppModel appModel, playerNum) {
     return  Expanded(
       child: InkWell(
         child: Container(
-          decoration: playerButtonDecoration(playerNum, _currentPlayer),
+          decoration: playerButtonDecoration(playerNum, appModel.currentPlayer),
           child: Center(
             child: Text(
-              _toTime(playerTimers[playerNum] ?? 0),
+              appModel.getPlayerTimeString(playerNum),
               style:Theme.of(context).textTheme.headlineLarge,
             ),
           ),
         ),
-        onTap: () => _passTurn(playerNum),
+        onTap: () => appModel.passTurn(playerNum),
       ),
     );
   }
@@ -139,32 +159,35 @@ class _TimerScreenState extends State<TimerScreen> {
     return Center(
       child: Stack(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Expanded(
-                child: Column(
+          Consumer<MyAppModel>(
+              builder: (context, appModel, child) {
+                return Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    _playerIndicator(1),
-                    const SizedBox(height: _widgetMargin), // Margin
-                    _playerIndicator(4),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          _playerIndicator(context, appModel, 1),
+                          const SizedBox(height: _widgetMargin), // Margin
+                          _playerIndicator(context, appModel, 4),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: _widgetMargin), // Margin
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          _playerIndicator(context, appModel, 2),
+                          const SizedBox(height: _widgetMargin), // Margin
+                          _playerIndicator(context, appModel, 3),
+                        ],
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              const SizedBox(width: _widgetMargin), // Margin
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    _playerIndicator(2),
-                    const SizedBox(height: _widgetMargin), // Margin
-                    _playerIndicator(3),
-                  ],
-                ),
-              ),
-            ],
-        ),
+                );
+              }),
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -179,7 +202,9 @@ class _TimerScreenState extends State<TimerScreen> {
           Align(
             alignment: Alignment.center,
             child: ElevatedButton(
-              onPressed: () => {_currentPlayer = 0},
+              onPressed: () => {
+                Provider.of<MyAppModel>(context, listen: false).togglePaused()
+              },
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(pauseButtonDiameter, pauseButtonDiameter),
                 shape: const CircleBorder(),
@@ -192,7 +217,6 @@ class _TimerScreenState extends State<TimerScreen> {
     );
   }
 }
-
 
 
 EdgeInsets playerButtonEdge(thisPlayer) {
