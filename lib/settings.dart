@@ -22,6 +22,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
   List<bool> isSelected = [true, false, false];
   List<int> _currentTimers = [40, 40, 40];
 
+  void onValueChanged(v) {
+    setState(() {
+      for (int index = 0; index < isSelected.length; index++) {
+        if (index == v) {
+          // toggling between the button to set it to true
+          isSelected[index] = !isSelected[index];
+        } else {
+          // other two buttons will not be selected and are set to false
+          isSelected[index] = false;
+        }
+      }
+      if (isSelected.every(isFalse)){
+        isSelected[v] = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -63,20 +80,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     trailing: Switch(
                         value: isSelected[0],
                         onChanged: (value) {
-                          setState(() {
-                            for (int index = 0; index < isSelected.length; index++) {
-                              if (index == 0) {
-                                // toggling between the button to set it to true
-                                isSelected[index] = !isSelected[index];
-                              } else {
-                                // other two buttons will not be selected and are set to false
-                                isSelected[index] = false;
-                              }
-                            }
-                            if (isSelected.every(isFalse)){
-                              isSelected[0] = true;
-                            }
-                          });
+                          onValueChanged(0);
                         })
                 ),
                 Visibility(
@@ -109,20 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     trailing: Switch(
                         value: isSelected[1],
                         onChanged: (value) {
-                          setState(() {
-                            for (int index = 0; index < isSelected.length; index++) {
-                              if (index == 1) {
-                                // toggling between the button to set it to true
-                                isSelected[index] = !isSelected[index];
-                              } else {
-                                // other two buttons will not be selected and are set to false
-                                isSelected[index] = false;
-                              }
-                            }
-                            if (isSelected.every(isFalse)){
-                              isSelected[1] = true;
-                            }
-                          });
+                          onValueChanged(1);
                         })
                 ),
                 Visibility(
@@ -156,18 +147,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         value: isSelected[2],
                         onChanged: (value) {
                           setState(() {
-                            for (int index = 0; index < isSelected.length; index++) {
-                              if (index == 2) {
-                                // toggling between the button to set it to true
-                                isSelected[index] = !isSelected[index];
-                              } else {
-                                // other two buttons will not be selected and are set to false
-                                isSelected[index] = false;
-                              }
-                            }
-                            if (isSelected.every(isFalse)){
-                              isSelected[2] = true;
-                            }
+                            onValueChanged(2);
                           });
                         })
                 ),
@@ -191,6 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 bool isFalse(bool value) => (value == false);
+
 
 
 class _CustomListTile extends StatelessWidget {
