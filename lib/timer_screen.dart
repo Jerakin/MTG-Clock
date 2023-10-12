@@ -126,6 +126,8 @@ TextStyle playerTextStyle(BuildContext context, MyAppModel appModel, MyAppSettin
   Color colorActive = Theme.of(context).colorScheme.primary;
   Color colorInactive = Theme.of(context).disabledColor;
   Color textColor = thisPlayer == appModel.currentPlayer ? colorActive : colorInactive;
+  
+  // TODO: appSettings.currentTimers[#] should be multiplied by 60
   if (appSettings.isSelected[0]) {
     if (appModel.playerTime(thisPlayer) > appSettings.currentTimers[0]){
       textColor = Theme.of(context).colorScheme.error;
