@@ -23,7 +23,7 @@ class TimerScreen extends StatelessWidget {
           child: Center(
             child: Text(
               appModel.getPlayerTimeString(playerNum),
-              style:playerTextStyle(appModel, appSettings, playerNum),
+              style:playerTextStyle(context, appModel, appSettings, playerNum),
             ),
           ),
         ),
@@ -122,7 +122,22 @@ BoxDecoration playerButtonDecoration(context, thisPlayer, currentPlayer) {
   );
 }
 
-TextStyle playerTextStyle(MyAppModel appModel, MyAppSettings appSettings, thisPlayer) {
+TextStyle playerTextStyle(BuildContext context, MyAppModel appModel, MyAppSettings appSettings, thisPlayer) {
+  Color colorActive = Theme.of(context).colorScheme.primary;
+  Color colorInactive = Theme.of(context).disabledColor;
+  Color textColor = thisPlayer == appModel.currentPlayer ? colorActive : colorInactive;
+  if (appSettings.isSelected[0]) {
+    if (appModel.playerTime(thisPlayer) > appSettings.currentTimers[0]){
+      textColor = Theme.of(context).colorScheme.error;
+    }
+  } else if (appSettings.isSelected[1]){
+    if (appModel.totalTime() >= appSettings.currentTimers[1]){
+      textColor = Theme.of(context).colorScheme.error;
+    }
+  }
   return TextStyle(
+    fontSize: 50,
+    color: textColor,
+
   );
 }

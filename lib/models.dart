@@ -14,6 +14,19 @@ class MyAppModel extends ChangeNotifier {
   Timer? timer;
   bool isPaused = true;
 
+  int totalTime(){
+    int total = 0;
+    for (int i in playerTimers.values){
+      total += i;
+    }
+    return Duration(milliseconds: total*100).inSeconds;
+  }
+
+  int playerTime(player){
+    int v = playerTimers[player] ?? 0;
+    return Duration(milliseconds: v*100).inSeconds;
+  }
+
   void togglePaused(){
     if (currentPlayer == 0){
       return;
