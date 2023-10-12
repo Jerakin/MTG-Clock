@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Super Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x283d95)),
         useMaterial3: true,
       ),
       home: MultiProvider(
@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   currentScreenIndex = 1 - currentScreenIndex;
                 });
               },
+              backgroundColor: Theme.of(context).cardColor,
               child: currentScreenIndex == 0 ? const Icon(Icons.settings) : const Icon(Icons.arrow_forward_rounded),
             )
           );
