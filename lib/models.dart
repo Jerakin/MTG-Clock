@@ -75,5 +75,44 @@ class MyAppModel extends ChangeNotifier {
 }
 
 class MyAppSettings extends ChangeNotifier {
+  int players = 4;
+  static const List<int> player_list = <int>[2, 3, 4, 5, 6];
+  List<bool> isSelected = [true, false, false];
+  List<int> currentTimers = [40, 40, 40];
 
+  void setSelectedTimerStyle(v){
+    for (int index = 0; index < isSelected.length; index++) {
+      if (index == v) {
+        // toggling between the button to set it to true
+        isSelected[index] = !isSelected[index];
+      } else {
+        // other two buttons will not be selected and are set to false
+        isSelected[index] = false;
+      }
+    }
+    if (isSelected.every(isFalse)){
+      isSelected[v] = true;
+    }
+  }
+
+  int maxTimePerPlayer(){
+    if (isSelected[0]){
+      return currentTimers[0]*players;
+    }
+    else if (isSelected[1]){
+      return currentTimers[1];
+    }
+    return 0;
+  }
+
+  bool globalTimeReached(currentTotalTime){
+    if (isSelected[0]){
+      return currentTimers[0]*players <= currentTotalTime;
+    }
+    else if (isSelected[1]){
+      return currentTimers[1] <= currentTotalTime;
+    }
+    return false;
+  }
 }
+bool isFalse(bool value) => (value == false);
