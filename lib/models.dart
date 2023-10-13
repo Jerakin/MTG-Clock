@@ -40,7 +40,7 @@ class MyAppModel extends ChangeNotifier {
   }
 
   String getPlayerTimeString(int i){
-    return _toTime(playerTimers[i] ?? 0);
+    return formatTimePlayers(playerTimers[i] ?? 0);
   }
 
   void passTurn(int player){
@@ -77,7 +77,15 @@ class MyAppModel extends ChangeNotifier {
     );
   }
 
-  String _toTime(value){
+  String formatTimeSeconds(value){
+    final duration = Duration(seconds: value);
+    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+
+    return '$minutes:$seconds';
+  }
+
+  String formatTimePlayers(value){
     final duration = Duration(milliseconds: value*100);
     String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
     String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
@@ -92,6 +100,18 @@ class MyAppSettings extends ChangeNotifier {
   static const List<int> player_list = <int>[2, 3, 4, 5, 6];
   List<bool> isSelected = [true, false, false];
   List<int> currentTimers = [40, 40, 40];
+
+  int getTotalTime(){
+    if (isSelected[0]){
+      return currentTimers[0]*players;
+    }
+    else if (isSelected[1]){
+      return currentTimers[1];
+    }
+    else {
+      return 0;
+    }
+  }
 
   void setSelectedTimerStyle(v){
     for (int index = 0; index < isSelected.length; index++) {

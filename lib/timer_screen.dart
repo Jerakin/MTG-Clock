@@ -34,33 +34,59 @@ class TimerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double pauseButtonDiameter = min(MediaQuery.of(context).size.width, MediaQuery.of(context).size.height) * 0.33;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double pauseButtonDiameter = min(MediaQuery.of(context).size.height, screenWidth) * 0.33;
+    int screenWidthInt = screenWidth.toInt();
 
     return Center(
       child: Stack(
         children: [
           Consumer2<MyAppModel, MyAppSettings>(
               builder: (context, appModel, appSettings, child) {
-                return Row(
+                return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                      Stack(children: [
+                        const SizedBox(
+                          height: _widgetMargin*4,
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Visibility(
+                            visible: !appSettings.isSelected[2],
+                            child: SizedBox(
+                              height: _widgetMargin*4,
+                              width: screenWidth * (appModel.totalTime() / appSettings.getTotalTime()),
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            ),
+                          ),
+                        )),
+                        Center(child: Text(
+                          appModel.formatTimeSeconds(appModel.totalTime()),
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ))
+                      ])
+                    , // Margin
                     Expanded(
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           _playerIndicator(context, appModel, appSettings, 1),
-                          const SizedBox(height: _widgetMargin), // Margin
+                          const SizedBox(width: _widgetMargin), // Margin
                           _playerIndicator(context, appModel, appSettings, 4),
                         ],
                       ),
                     ),
-                    const SizedBox(width: _widgetMargin), // Margin
+                    const SizedBox(height: _widgetMargin), // Margin
                     Expanded(
-                      child: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           _playerIndicator(context, appModel, appSettings, 2),
-                          const SizedBox(height: _widgetMargin), // Margin
+                          const SizedBox(width: _widgetMargin), // Margin
                           _playerIndicator(context, appModel, appSettings, 3),
                         ],
                       ),
@@ -126,7 +152,7 @@ TextStyle playerTextStyle(BuildContext context, MyAppModel appModel, MyAppSettin
   Color colorActive = Theme.of(context).colorScheme.primary;
   Color colorInactive = Theme.of(context).disabledColor;
   Color textColor = thisPlayer == appModel.currentPlayer ? colorActive : colorInactive;
-  
+
   // TODO: appSettings.currentTimers[#] should be multiplied by 60
   if (appSettings.isSelected[0]) {
     if (appModel.playerTime(thisPlayer) > appSettings.currentTimers[0]){
