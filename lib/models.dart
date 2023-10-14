@@ -119,7 +119,6 @@ class MyAppSettings extends ChangeNotifier {
   static const List<int> player_list = <int>[2, 3, 4, 5, 6];
   List<int> currentTimers = [40, 40, 40];
   int selectedTimer = 3;
-  ThemeMode theme = ThemeMode.dark;
 
   int getTotalTime() {
     if (selectedTimer == 1) {
