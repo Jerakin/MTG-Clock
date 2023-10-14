@@ -31,6 +31,7 @@ dependencies:
   provider:
   numberpicker: ^2.1.2
   adaptive_dialog: ^1.9.0+2
+  shared_preferences: 
   flutter:
     sdk: flutter
 

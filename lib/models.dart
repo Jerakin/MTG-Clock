@@ -4,6 +4,7 @@ import 'dart:js_util';
 import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
+import 'package:edhtimer_flutter/simple_prefs.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -115,39 +116,56 @@ class MyAppModel extends ChangeNotifier {
 }
 
 class MyAppSettings extends ChangeNotifier {
-  int players = 4;
-  static const List<int> player_list = <int>[2, 3, 4, 5, 6];
-  List<int> currentTimers = [40, 40, 40];
-  int selectedTimer = 3;
+  int playerCount = SimplePrefs.getPlayerCount() ?? 4;
+  int selectedTimer = SimplePrefs.getSelectedTimer() ?? 2;
+  int playerTimeLimit = SimplePrefs.getPerPlayerTimeLimit() ?? 20;
+  int tournamentTimeLimit = SimplePrefs.getTournamentTimeLimit() ?? 90;
+
+  Future<void> setPlayerTimeLimit(int time) async {
+      playerTimeLimit = time;
+      SimplePrefs.setPerPlayerTimeLimit(time);
+  }
+
+  Future<void> setTournamentTimeLimit(int time) async {
+    tournamentTimeLimit = time;
+    SimplePrefs.setTournamentTimeLimit(time);
+  }
+
+  Future<void> setPlayerCount(int value) async {
+    playerCount = playerCount;
+    SimplePrefs.setPlayerCount(value);
+    notifyListeners();
+  }
+
+  Future<void> setSelectedTimerStyle(int v) async {
+    selectedTimer = v;
+    SimplePrefs.setSelectedTimer(v);
+  }
 
   int getTotalTime() {
     if (selectedTimer == 1) {
-      return currentTimers[0] * players;
+      return playerTimeLimit * playerCount;
     } else if (selectedTimer == 2) {
-      return currentTimers[1];
+      return tournamentTimeLimit;
     } else {
       return 0;
     }
   }
 
-  void setSelectedTimerStyle(int v) {
-    selectedTimer = v;
-  }
-
   int maxTimePerPlayer() {
     if (selectedTimer == 1) {
-      return currentTimers[0] * players;
+      return playerTimeLimit * playerCount;
     } else if (selectedTimer == 2) {
-      return currentTimers[1];
+      return tournamentTimeLimit;
     }
     return 0;
   }
 
   bool globalTimeReached(currentTotalTime) {
     if (selectedTimer == 1) {
-      return currentTimers[0] * players <= currentTotalTime;
+      return playerTimeLimit * playerCount <= currentTotalTime;
     } else if (selectedTimer == 2) {
-      return currentTimers[1] <= currentTotalTime;
+      return tournamentTimeLimit <= currentTotalTime;
     }
     return false;
   }

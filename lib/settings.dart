@@ -21,7 +21,7 @@ class SettingsScreen extends StatefulWidget {
 Future<OkCancelResult> dialogCallback(OkCancelResult result,
     MyAppModel appModel, MyAppSettings appSettings, int value) async {
   if (result == OkCancelResult.ok) {
-    appSettings.players = value;
+    await appSettings.setPlayerCount(value);
     appModel.reset();
   }
   return result;
@@ -102,7 +102,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         textStyle: DefaultTextStyle.of(context)
                             .style
                             .apply(fontSizeFactor: 1.0),
-                        value: appSettings.currentTimers[0],
+                        value: appSettings.playerTimeLimit,
                         axis: Axis.horizontal,
                         itemCount: 5,
                         minValue: 10,
@@ -110,7 +110,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         step: 5,
                         onChanged: (value) {
                           setState(() {
-                            appSettings.currentTimers[0] = value;
+                            appSettings.setPlayerTimeLimit(value);
                           });
                         },
                       ),
@@ -145,7 +145,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         textStyle: DefaultTextStyle.of(context)
                             .style
                             .apply(fontSizeFactor: 1.0),
-                        value: appSettings.currentTimers[1],
+                        value: appSettings.tournamentTimeLimit,
                         axis: Axis.horizontal,
                         itemCount: 5,
                         minValue: 10,
@@ -153,7 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         step: 5,
                         onChanged: (value) {
                           setState(() {
-                            appSettings.currentTimers[1] = value;
+                            appSettings.setTournamentTimeLimit(value);
                           });
                         },
                       ),
@@ -204,7 +204,7 @@ ElevatedButton numberButton(BuildContext context, MyAppModel appModel,
     style: ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
           side: BorderSide(
-              style: value == appSettings.players
+              style: value == appSettings.playerCount
                   ? BorderStyle.solid
                   : BorderStyle.none,
               width: 2, // thickness
