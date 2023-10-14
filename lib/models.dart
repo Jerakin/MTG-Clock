@@ -29,10 +29,11 @@ class MyAppModel extends ChangeNotifier {
 
   void togglePaused(){
     if (currentPlayer == 0){
-      return;
+      passTurn(1);
+    } else {
+      isPaused = !isPaused;
+      notifyListeners();
     }
-    isPaused = !isPaused;
-    notifyListeners();
   }
 
   void setActivePlayer(int i){
@@ -50,7 +51,7 @@ class MyAppModel extends ChangeNotifier {
     // Change the player, if the current player is clicked pass it.
     // If another player is clicked, set that player as current.
     if (currentPlayer == player) {
-      setActivePlayer(modulo(currentPlayer, 4) + 1);
+      setActivePlayer(modulo(player, 4) + 1);
     } else {
       setActivePlayer(player);
     }

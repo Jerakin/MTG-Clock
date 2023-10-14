@@ -36,7 +36,6 @@ class TimerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double pauseButtonDiameter = min(MediaQuery.of(context).size.height, screenWidth) * 0.33;
-    int screenWidthInt = screenWidth.toInt();
 
     return Center(
       child: Stack(
