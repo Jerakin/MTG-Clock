@@ -12,7 +12,6 @@ import '/models.dart';
 import '/settings.dart';
 import '/timer_screen.dart';
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -29,17 +28,15 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x283d95)),
         useMaterial3: true,
       ),
-      home: MultiProvider(
-         providers: [
-           ChangeNotifierProvider(create: (context) => MyAppModel()),
-           ChangeNotifierProvider(create: (context) => MyAppSettings())
-         ],
-          child:const HomeScreen(title: 'EDH Timer')),
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider(create: (context) => MyAppModel()),
+        ChangeNotifierProvider(create: (context) => MyAppSettings())
+      ], child: const HomeScreen(title: 'EDH Timer')),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget{
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.title});
 
   final String title;
@@ -64,24 +61,22 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
-      body: currentWidget,
-      floatingActionButton:
-      Consumer<MyAppModel>(
-        builder: (context, appModel, child) {
-          return Visibility(
-            visible: appModel.isPaused,
-            child: FloatingActionButton(
-              onPressed: (){
-                setState(() {
-                  currentScreenIndex = 1 - currentScreenIndex;
-                });
-              },
-              backgroundColor: Theme.of(context).cardColor,
-              child: currentScreenIndex == 0 ? const Icon(Icons.settings) : const Icon(Icons.arrow_forward_rounded),
-            )
-          );
-        }
-      )
-    );
+        body: currentWidget,
+        floatingActionButton:
+            Consumer<MyAppModel>(builder: (context, appModel, child) {
+            return Visibility(
+              visible: appModel.isPaused,
+              child: FloatingActionButton(
+                onPressed: () {
+                  setState(() {
+                    currentScreenIndex = 1 - currentScreenIndex;
+                  });
+                },
+                backgroundColor: Theme.of(context).cardColor,
+                child: currentScreenIndex == 0
+                    ? const Icon(Icons.settings)
+                    : const Icon(Icons.arrow_forward_rounded),
+              ));
+        }));
   }
 }
