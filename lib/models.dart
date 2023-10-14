@@ -132,9 +132,9 @@ class MyAppSettings extends ChangeNotifier {
   }
 
   Future<void> setPlayerCount(int value) async {
-    playerCount = playerCount;
+    playerCount = value;
     SimplePrefs.setPlayerCount(value);
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> setSelectedTimerStyle(int v) async {
