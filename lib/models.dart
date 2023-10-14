@@ -13,6 +13,13 @@ class MyAppModel extends ChangeNotifier {
   int currentPlayer = 0;
   Timer? timer;
   bool isPaused = true;
+  final turnOrder = {
+    2: [0, 2, 1],
+    3: [0, 2, 3, 1],
+    4: [0, 2, 4, 1, 3],
+    5: [0, 2, 5, 1, 3, 4],
+    6: [0, 2, 5, 6, 3, 4, 1],
+  };
 
   int totalTime() {
     int total = 0;
@@ -51,7 +58,9 @@ class MyAppModel extends ChangeNotifier {
     // Change the player, if the current player is clicked pass it.
     // If another player is clicked, set that player as current.
     if (currentPlayer == player) {
-      setActivePlayer(modulo(player, maxPlayers) + 1);
+      List<int> turnList = turnOrder[maxPlayers] ?? [];
+      int passTo = turnList[player];
+      setActivePlayer(passTo);
     } else {
       setActivePlayer(player);
     }
