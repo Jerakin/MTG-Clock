@@ -31,7 +31,8 @@ dependencies:
   provider:
   numberpicker: ^2.1.2
   adaptive_dialog: ^1.9.0+2
-  shared_preferences: 
+  shared_preferences:
+  url_launcher:
   flutter:
     sdk: flutter
 

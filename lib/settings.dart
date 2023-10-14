@@ -8,6 +8,7 @@ import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '/models.dart';
 
@@ -23,6 +24,16 @@ Future<OkCancelResult> dialogCallback(OkCancelResult result,
   if (result == OkCancelResult.ok) {
     await appSettings.setPlayerCount(value);
     appModel.reset();
+  }
+  return result;
+}
+
+Future<OkCancelResult> openKofi(OkCancelResult result) async {
+  if (result == OkCancelResult.ok) {
+    final Uri url = Uri.parse('https://ko-fi.com/jerakin');
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
   return result;
 }
@@ -176,12 +187,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             const Divider(),
-            const _SingleSection(
+            _SingleSection(
               children: [
                 _CustomListTile(
-                    title: "Help & Feedback", icon: Icons.help_outline_rounded),
-                _CustomListTile(
-                    title: "About", icon: Icons.info_outline_rounded),
+                  title: "About",
+                  icon: Icons.info_outline_rounded,
+                  onTap: () async { await showOkCancelAlertDialog(
+                    context: context,
+                    okLabel: "Coffee",
+                    title: "About",
+                    message: "Created by Jerakin. Consider buy me a coffee if you enjoy the app.",
+                  ).then((value) => openKofi(value))
+                  ;},
+                ),
               ],
             ),
           ],
@@ -222,13 +240,15 @@ class _CustomListTile extends StatelessWidget {
   final Widget? subtitleWidget;
   final IconData icon;
   final Widget? trailing;
+  final Function? onTap;
 
   const _CustomListTile(
       {Key? key,
       required this.title,
       required this.icon,
       this.trailing,
-      this.subtitleWidget})
+      this.subtitleWidget,
+      this.onTap})
       : super(key: key);
 
   @override
@@ -238,7 +258,9 @@ class _CustomListTile extends StatelessWidget {
       title: Text(title),
       leading: Icon(icon),
       trailing: trailing,
-      onTap: () {},
+      onTap: (){
+        if (onTap != null) onTap!();
+      },
     );
   }
 }
