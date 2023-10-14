@@ -134,7 +134,6 @@ class MyAppSettings extends ChangeNotifier {
   Future<void> setPlayerCount(int value) async {
     playerCount = value;
     SimplePrefs.setPlayerCount(value);
-    // notifyListeners();
   }
 
   Future<void> setSelectedTimerStyle(int v) async {

@@ -25,7 +25,7 @@ class TimerScreen extends StatelessWidget {
       }
     } else if (playerNum == 2) {
       quarterTurns = 2;
-      if (appSettings.playerCount < 3) {
+      if (appSettings.playerCount < 4) {
         quarterTurns = 3;
       }
     } else if (playerNum == 5) {
