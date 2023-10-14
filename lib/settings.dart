@@ -7,6 +7,7 @@ import 'dart:ui';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 
 import '/models.dart';
 
@@ -17,13 +18,21 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
+Future<OkCancelResult> dialogCallback(OkCancelResult result, MyAppModel appModel, MyAppSettings appSettings, int value) async {
+  if (result == OkCancelResult.ok){
+    appSettings.players = value;
+    appModel.reset();
+  }
+  return result;
+}
+
 class _SettingsScreenState extends State<SettingsScreen> {
   static const List<int> _list = <int>[2, 3, 4, 5, 6];
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<MyAppSettings>(builder: (context, appSettings, child) {
+      child: Consumer2<MyAppModel, MyAppSettings>(builder: (context, appModel, appSettings, child) {
         return ListView(
           children: [
             _SingleSection(
@@ -32,21 +41,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _CustomListTile(
                     title: "Players",
                     icon: Icons.people,
-                    trailing: DropdownButton<int>(
-                      value: appSettings.players,
-                      onChanged: (int? value) {
-                        // This is called when the user selects an item.
-                        setState(() {
-                          appSettings.players = value!;
-                        });
-                      },
-                      items: _list.map<DropdownMenuItem<int>>((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                    )),
+                    trailing: FittedBox(child:Row(children: [
+                      numberButton(context, appModel, appSettings, 2),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 3),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 4),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 5),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 6),
+                    ]),)
+                )
               ],
             ),
             const Divider(),
@@ -170,6 +176,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
       }),
     );
   }
+}
+
+
+
+ElevatedButton numberButton(BuildContext context, MyAppModel appModel, MyAppSettings appSettings, int value){
+  return ElevatedButton(
+    onPressed: () async {
+      await showOkCancelAlertDialog(
+        context: context,
+        title: 'Warning',
+        message: 'This will reset the current game.',
+      ).then((result) => dialogCallback(result, appModel, appSettings, value));
+    },
+    style: ElevatedButton.styleFrom(
+      shape: RoundedRectangleBorder(
+          side: BorderSide(
+            style: value == appSettings.players ? BorderStyle.solid: BorderStyle.none,
+            width: 2, // thickness
+            color: Theme.of(context).primaryColor // color
+          ),
+          borderRadius: const BorderRadius.all(
+              Radius.circular(10)
+          )
+      ),
+      padding: const EdgeInsets.all(20),
+    ),
+    child: Text(value.toString()),
+  );
 }
 
 class _CustomListTile extends StatelessWidget {

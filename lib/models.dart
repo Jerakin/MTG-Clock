@@ -34,6 +34,13 @@ class MyAppModel extends ChangeNotifier {
     return Duration(milliseconds: v * 100).inSeconds;
   }
 
+  void reset(){
+    currentPlayer = 0;
+    isPaused = true;
+    playerTimers = HashMap();
+    notifyListeners();
+  }
+
   void togglePaused() {
     if (currentPlayer == 0) {
       passTurn(1, 1);
