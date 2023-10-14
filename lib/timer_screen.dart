@@ -29,7 +29,7 @@ class TimerScreen extends StatelessWidget {
             ),
           ),
         ),
-        onTap: () => appModel.passTurn(playerNum),
+        onTap: () => appModel.passTurn(playerNum, appSettings.players),
       ),
     );
   }
@@ -73,27 +73,73 @@ class TimerScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ))
                 ]), // Margin
+
                 Expanded(
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _playerIndicator(context, appModel, appSettings, 1),
-                      const SizedBox(width: _widgetMargin), // Margin
-                      _playerIndicator(context, appModel, appSettings, 4),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: _widgetMargin), // Margin
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _playerIndicator(context, appModel, appSettings, 2),
-                      const SizedBox(width: _widgetMargin), // Margin
-                      _playerIndicator(context, appModel, appSettings, 3),
-                    ],
-                  ),
-                ),
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Visibility(
+                          visible: appSettings.players > 5,
+                          child: _playerIndicator(
+                              context, appModel, appSettings, 5),
+                        ),
+                        Visibility(
+                          visible: appSettings.players > 5,
+                          child: const SizedBox(width: _widgetMargin),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              _playerIndicator(
+                                  context, appModel, appSettings, 1),
+                              const SizedBox(height: _widgetMargin), // Margin
+                              Visibility(
+                                visible: appSettings.players > 2,
+                                child: _playerIndicator(
+                                    context, appModel, appSettings, 3),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Visibility(
+                          visible: appSettings.players > 1,
+                          child: const SizedBox(width: _widgetMargin),
+                        ),
+                        Visibility(
+                          visible: appSettings.players > 1,
+                          child: Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Visibility(
+                                  visible: appSettings.players > 1,
+                                  child: _playerIndicator(
+                                      context, appModel, appSettings, 2),
+                                ),
+                                const SizedBox(height: _widgetMargin),
+                                // Margin
+                                Visibility(
+                                  visible: appSettings.players > 3,
+                                  child: _playerIndicator(
+                                      context, appModel, appSettings, 4),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        Visibility(
+                          visible: appSettings.players > 4,
+                          child: const SizedBox(width: _widgetMargin),
+                        ),
+                        Visibility(
+                          visible: appSettings.players > 4,
+                          child: _playerIndicator(
+                              context, appModel, appSettings, 5),
+                        ), // Margin
+                      ]),
+                )
               ],
             );
           }),
