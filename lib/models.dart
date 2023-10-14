@@ -35,7 +35,7 @@ class MyAppModel extends ChangeNotifier {
     return Duration(milliseconds: v * 100).inSeconds;
   }
 
-  void reset(){
+  void reset() {
     currentPlayer = 0;
     isPaused = true;
     playerTimers = HashMap();
@@ -122,8 +122,8 @@ class MyAppSettings extends ChangeNotifier {
   int tournamentTimeLimit = SimplePrefs.getTournamentTimeLimit() ?? 90;
 
   Future<void> setPlayerTimeLimit(int time) async {
-      playerTimeLimit = time;
-      SimplePrefs.setPerPlayerTimeLimit(time);
+    playerTimeLimit = time;
+    SimplePrefs.setPerPlayerTimeLimit(time);
   }
 
   Future<void> setTournamentTimeLimit(int time) async {

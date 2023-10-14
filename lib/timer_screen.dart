@@ -18,19 +18,19 @@ class TimerScreen extends StatelessWidget {
   Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
       MyAppSettings appSettings, playerNum) {
     int quarterTurns = 0;
-    if (playerNum == 1){
+    if (playerNum == 1) {
       quarterTurns = 2;
       if (appSettings.playerCount < 3) {
         quarterTurns = 1;
       }
-    } else if (playerNum == 2){
+    } else if (playerNum == 2) {
       quarterTurns = 2;
       if (appSettings.playerCount < 3) {
         quarterTurns = 3;
       }
-    } else if (playerNum == 5){
+    } else if (playerNum == 5) {
       quarterTurns = 3;
-    } else if (playerNum == 6){
+    } else if (playerNum == 6) {
       quarterTurns = 1;
     }
 
@@ -40,14 +40,13 @@ class TimerScreen extends StatelessWidget {
           decoration: playerButtonDecoration(
               context, playerNum, appModel.currentPlayer),
           child: Center(
-            child: RotatedBox(
-              quarterTurns: quarterTurns,
-              child: Text(
-                appModel.getPlayerTimeString(playerNum),
-                style: playerTextStyle(context, appModel, appSettings, playerNum),
-              ),
-            )
-          ),
+              child: RotatedBox(
+            quarterTurns: quarterTurns,
+            child: Text(
+              appModel.getPlayerTimeString(playerNum),
+              style: playerTextStyle(context, appModel, appSettings, playerNum),
+            ),
+          )),
         ),
         onTap: () => appModel.passTurn(playerNum, appSettings.playerCount),
       ),

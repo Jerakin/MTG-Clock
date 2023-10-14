@@ -15,7 +15,7 @@ import '/settings.dart';
 import '/timer_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future main() async{
+Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await SimplePrefs.init();
@@ -32,16 +32,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EDH Timer',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0x283d95)
-        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x283d95)),
         useMaterial3: true,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-            brightness: Brightness.dark,
-            seedColor: const Color(0x283d95)
-        ),
+            brightness: Brightness.dark, seedColor: const Color(0x283d95)),
         useMaterial3: true,
       ),
       themeMode: ThemeMode.system,
@@ -81,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: currentWidget,
         floatingActionButton:
             Consumer<MyAppModel>(builder: (context, appModel, child) {
-            return Visibility(
+          return Visibility(
               visible: appModel.isPaused,
               child: FloatingActionButton(
                 onPressed: () {
