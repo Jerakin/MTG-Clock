@@ -75,7 +75,7 @@ class TimerScreen extends StatelessWidget {
                   Align(
                       alignment: Alignment.topLeft,
                       child: Visibility(
-                        visible: !appSettings.isSelected[2],
+                        visible: appSettings.selectedTimer != 3,
                         child: SizedBox(
                           height: _widgetMargin * 4,
                           width: screenWidth *
@@ -230,11 +230,11 @@ TextStyle playerTextStyle(BuildContext context, MyAppModel appModel,
       thisPlayer == appModel.currentPlayer ? colorActive : colorInactive;
 
   // TODO: appSettings.currentTimers[#] should be multiplied by 60
-  if (appSettings.isSelected[0]) {
+  if (appSettings.selectedTimer == 1) {
     if (appModel.playerTime(thisPlayer) > appSettings.currentTimers[0]) {
       textColor = Theme.of(context).colorScheme.error;
     }
-  } else if (appSettings.isSelected[1]) {
+  } else if (appSettings.selectedTimer == 2) {
     if (appModel.totalTime() >= appSettings.currentTimers[1]) {
       textColor = Theme.of(context).colorScheme.error;
     }

@@ -76,19 +76,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: "Per Player",
                     icon: Icons.person,
                     subtitleWidget: Visibility(
-                        visible: appSettings.isSelected[0],
+                        visible: appSettings.selectedTimer == 1,
                         child: const Text(
                             "Each player has this much time at which point their indicator will be lit up.",
                             style: TextStyle(fontStyle: FontStyle.italic))),
                     trailing: Switch(
-                        value: appSettings.isSelected[0],
+                        value: appSettings.selectedTimer == 1,
                         onChanged: (value) {
                           setState(() {
-                            appSettings.setSelectedTimerStyle(0);
+                            appSettings.setSelectedTimerStyle(1);
                           });
                         })),
                 Visibility(
-                    visible: appSettings.isSelected[0],
+                    visible: appSettings.selectedTimer == 1,
                     child: ScrollConfiguration(
                       behavior: ScrollConfiguration.of(context)
                           .copyWith(dragDevices: {
@@ -119,19 +119,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: "Total Time",
                     icon: Icons.watch_later_outlined,
                     subtitleWidget: Visibility(
-                        visible: appSettings.isSelected[1],
+                        visible: appSettings.selectedTimer == 2,
                         child: const Text(
                             "Tournament style. Game will automatically pause when the time is over.",
                             style: TextStyle(fontStyle: FontStyle.italic))),
                     trailing: Switch(
-                        value: appSettings.isSelected[1],
+                        value: appSettings.selectedTimer == 2,
                         onChanged: (value) {
                           setState(() {
-                            appSettings.setSelectedTimerStyle(1);
+                            appSettings.setSelectedTimerStyle(2);
                           });
                         })),
                 Visibility(
-                    visible: appSettings.isSelected[1],
+                    visible: appSettings.selectedTimer == 2,
                     child: ScrollConfiguration(
                       behavior: ScrollConfiguration.of(context)
                           .copyWith(dragDevices: {
@@ -162,15 +162,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: "Stopwatch",
                     icon: Icons.timer_sharp,
                     subtitleWidget: Visibility(
-                        visible: appSettings.isSelected[2],
+                        visible: appSettings.selectedTimer == 3,
                         child: const Text(
                             "No limit. Time keeps ticking up for everyone.",
                             style: TextStyle(fontStyle: FontStyle.italic))),
                     trailing: Switch(
-                        value: appSettings.isSelected[2],
+                        value: appSettings.selectedTimer == 3,
                         onChanged: (value) {
                           setState(() {
-                            appSettings.setSelectedTimerStyle(2);
+                            appSettings.setSelectedTimerStyle(3);
                           });
                         })),
               ],
