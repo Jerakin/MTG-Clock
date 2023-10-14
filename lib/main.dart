@@ -23,11 +23,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Super Demo',
+      title: 'EDH Timer',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x283d95)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color(0x283d95)
+        ),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+            brightness: Brightness.dark,
+            seedColor: const Color(0x283d95)
+        ),
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
       home: MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => MyAppModel()),
         ChangeNotifierProvider(create: (context) => MyAppSettings())

@@ -170,9 +170,9 @@ class TimerScreen extends StatelessWidget {
             child: Container(
               width: pauseButtonDiameter + _widgetMargin * 2,
               height: pauseButtonDiameter + _widgetMargin * 2,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: Theme.of(context).scaffoldBackgroundColor,
               ),
             ),
           ),
@@ -194,7 +194,7 @@ class TimerScreen extends StatelessWidget {
                     Provider.of<MyAppModel>(context, listen: false).isPaused
                         ? Icons.play_arrow_sharp
                         : Icons.pause_sharp,
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     size: pauseButtonDiameter * 0.4,
                   );
                 })),

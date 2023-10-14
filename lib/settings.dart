@@ -18,8 +18,9 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-Future<OkCancelResult> dialogCallback(OkCancelResult result, MyAppModel appModel, MyAppSettings appSettings, int value) async {
-  if (result == OkCancelResult.ok){
+Future<OkCancelResult> dialogCallback(OkCancelResult result,
+    MyAppModel appModel, MyAppSettings appSettings, int value) async {
+  if (result == OkCancelResult.ok) {
     appSettings.players = value;
     appModel.reset();
   }
@@ -27,12 +28,11 @@ Future<OkCancelResult> dialogCallback(OkCancelResult result, MyAppModel appModel
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  static const List<int> _list = <int>[2, 3, 4, 5, 6];
-
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer2<MyAppModel, MyAppSettings>(builder: (context, appModel, appSettings, child) {
+      child: Consumer2<MyAppModel, MyAppSettings>(
+          builder: (context, appModel, appSettings, child) {
         return ListView(
           children: [
             _SingleSection(
@@ -41,18 +41,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _CustomListTile(
                     title: "Players",
                     icon: Icons.people,
-                    trailing: FittedBox(child:Row(children: [
-                      numberButton(context, appModel, appSettings, 2),
-                      const SizedBox(width: 5),
-                      numberButton(context, appModel, appSettings, 3),
-                      const SizedBox(width: 5),
-                      numberButton(context, appModel, appSettings, 4),
-                      const SizedBox(width: 5),
-                      numberButton(context, appModel, appSettings, 5),
-                      const SizedBox(width: 5),
-                      numberButton(context, appModel, appSettings, 6),
-                    ]),)
-                )
+                    trailing: FittedBox(
+                      child: Row(children: [
+                        numberButton(context, appModel, appSettings, 2),
+                        const SizedBox(width: 5),
+                        numberButton(context, appModel, appSettings, 3),
+                        const SizedBox(width: 5),
+                        numberButton(context, appModel, appSettings, 4),
+                        const SizedBox(width: 5),
+                        numberButton(context, appModel, appSettings, 5),
+                        const SizedBox(width: 5),
+                        numberButton(context, appModel, appSettings, 6),
+                      ]),
+                    )),
+                // _CustomListTile(
+                //   title: "Dark theme",
+                //   icon: Icons.dark_mode,
+                //   trailing: Switch(
+                //     value: appSettings.theme == ThemeMode.dark,
+                //     onChanged: (value) {
+                //       setState(() {
+                //         appSettings.theme = value == true ? ThemeMode.dark : ThemeMode.light;
+                //       });
+                //     }
+                //     )
+                // ),
               ],
             ),
             const Divider(),
@@ -178,9 +191,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-
-
-ElevatedButton numberButton(BuildContext context, MyAppModel appModel, MyAppSettings appSettings, int value){
+ElevatedButton numberButton(BuildContext context, MyAppModel appModel,
+    MyAppSettings appSettings, int value) {
   return ElevatedButton(
     onPressed: () async {
       await showOkCancelAlertDialog(
@@ -192,14 +204,13 @@ ElevatedButton numberButton(BuildContext context, MyAppModel appModel, MyAppSett
     style: ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
           side: BorderSide(
-            style: value == appSettings.players ? BorderStyle.solid: BorderStyle.none,
-            width: 2, // thickness
-            color: Theme.of(context).primaryColor // color
-          ),
-          borderRadius: const BorderRadius.all(
-              Radius.circular(10)
-          )
-      ),
+              style: value == appSettings.players
+                  ? BorderStyle.solid
+                  : BorderStyle.none,
+              width: 2, // thickness
+              color: Theme.of(context).colorScheme.primary // color
+              ),
+          borderRadius: const BorderRadius.all(Radius.circular(10))),
       padding: const EdgeInsets.all(20),
     ),
     child: Text(value.toString()),
