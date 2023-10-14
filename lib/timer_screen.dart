@@ -73,7 +73,6 @@ class TimerScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ))
                 ]), // Margin
-
                 Expanded(
                   child: Row(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -81,7 +80,7 @@ class TimerScreen extends StatelessWidget {
                         Visibility(
                           visible: appSettings.players > 5,
                           child: _playerIndicator(
-                              context, appModel, appSettings, 5),
+                              context, appModel, appSettings, 6),
                         ),
                         Visibility(
                           visible: appSettings.players > 5,
@@ -93,7 +92,10 @@ class TimerScreen extends StatelessWidget {
                             children: <Widget>[
                               _playerIndicator(
                                   context, appModel, appSettings, 1),
-                              const SizedBox(height: _widgetMargin), // Margin
+                              Visibility(
+                                visible: appSettings.players > 2,
+                                child: const SizedBox(height: _widgetMargin),
+                              ),
                               Visibility(
                                 visible: appSettings.players > 2,
                                 child: _playerIndicator(
@@ -102,10 +104,7 @@ class TimerScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Visibility(
-                          visible: appSettings.players > 1,
-                          child: const SizedBox(width: _widgetMargin),
-                        ),
+                        const SizedBox(width: _widgetMargin),
                         Visibility(
                           visible: appSettings.players > 1,
                           child: Expanded(
@@ -117,7 +116,10 @@ class TimerScreen extends StatelessWidget {
                                   child: _playerIndicator(
                                       context, appModel, appSettings, 2),
                                 ),
-                                const SizedBox(height: _widgetMargin),
+                                Visibility(
+                                  visible: appSettings.players > 3,
+                                  child: const SizedBox(height: _widgetMargin),
+                                ),
                                 // Margin
                                 Visibility(
                                   visible: appSettings.players > 3,
