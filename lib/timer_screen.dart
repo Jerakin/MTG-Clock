@@ -17,16 +17,36 @@ class TimerScreen extends StatelessWidget {
 
   Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
       MyAppSettings appSettings, playerNum) {
+    int quarterTurns = 0;
+    if (playerNum == 1){
+      quarterTurns = 2;
+      if (appSettings.players < 3) {
+        quarterTurns = 1;
+      }
+    } else if (playerNum == 2){
+      quarterTurns = 2;
+      if (appSettings.players < 3) {
+        quarterTurns = 3;
+      }
+    } else if (playerNum == 5){
+      quarterTurns = 3;
+    } else if (playerNum == 6){
+      quarterTurns = 1;
+    }
+
     return Expanded(
       child: InkWell(
         child: Container(
           decoration: playerButtonDecoration(
               context, playerNum, appModel.currentPlayer),
           child: Center(
-            child: Text(
-              appModel.getPlayerTimeString(playerNum),
-              style: playerTextStyle(context, appModel, appSettings, playerNum),
-            ),
+            child: RotatedBox(
+              quarterTurns: quarterTurns,
+              child: Text(
+                appModel.getPlayerTimeString(playerNum),
+                style: playerTextStyle(context, appModel, appSettings, playerNum),
+              ),
+            )
           ),
         ),
         onTap: () => appModel.passTurn(playerNum, appSettings.players),
