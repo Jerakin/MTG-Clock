@@ -1,13 +1,8 @@
 import 'dart:collection';
-import 'dart:html';
-import 'dart:js_util';
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
-import 'package:edhtimer_flutter/simple_prefs.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+import '/simple_prefs.dart';
 
 class MyAppModel extends ChangeNotifier {
   Map<int, int> playerTimers = HashMap();

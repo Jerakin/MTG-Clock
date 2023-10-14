@@ -1,19 +1,11 @@
-import 'dart:collection';
-import 'dart:html';
-import 'dart:js_util';
 import 'dart:async';
-import 'dart:math';
-import 'dart:ui';
-import 'package:edhtimer_flutter/simple_prefs.dart';
-import 'package:flutter/services.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '/models.dart';
+import '/simple_prefs.dart';
 import '/settings.dart';
 import '/timer_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
