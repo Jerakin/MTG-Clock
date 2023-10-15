@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EDH Timer',
+      title: 'MTG Clock',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0x283d95)),
         useMaterial3: true,
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       home: MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => MyAppModel()),
         ChangeNotifierProvider(create: (context) => MyAppSettings())
-      ], child: const HomeScreen(title: 'EDH Timer')),
+      ], child: const HomeScreen(title: 'MTG Clock')),
     );
   }
 }

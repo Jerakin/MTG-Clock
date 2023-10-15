@@ -1,4 +1,4 @@
-package com.jerakin.edhtimer.edhtimer_flutter
+package com.jerakin.mtgclock
 
 import io.flutter.embedding.android.FlutterActivity
 

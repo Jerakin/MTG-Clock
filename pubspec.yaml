@@ -1,5 +1,5 @@
-name: edhtimer_flutter
-description: A new Flutter project.
+name: MTGClock
+description: Timer and Clock functionality for card games.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
