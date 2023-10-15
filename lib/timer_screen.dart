@@ -13,19 +13,23 @@ class TimerScreen extends StatelessWidget {
       MyAppSettings appSettings, playerNum) {
     int quarterTurns = 0;
     if (playerNum == 1) {
-      quarterTurns = 2;
+      quarterTurns = 3;
       if (appSettings.playerCount < 3) {
-        quarterTurns = 1;
+        quarterTurns = 2;
       }
     } else if (playerNum == 2) {
-      quarterTurns = 2;
-      if (appSettings.playerCount < 4) {
-        quarterTurns = 3;
-      }
-    } else if (playerNum == 5) {
       quarterTurns = 3;
-    } else if (playerNum == 6) {
+      if (appSettings.playerCount < 4) {
+        quarterTurns = 0;
+      }
+    } else if (playerNum == 3) {
       quarterTurns = 1;
+    } else if (playerNum == 4) {
+      quarterTurns = 1;
+    } else if (playerNum == 4) {
+      quarterTurns = 0;
+    } else if (playerNum == 6) {
+      quarterTurns = 2;
     }
 
     return Expanded(
@@ -33,8 +37,7 @@ class TimerScreen extends StatelessWidget {
         child: Container(
           decoration: playerButtonDecoration(
               context, playerNum, appModel.currentPlayer),
-          child: Center(
-              child: RotatedBox(
+          child: Center(child: RotatedBox(
             quarterTurns: quarterTurns,
             child: Text(
               appModel.getPlayerTimeString(playerNum),
@@ -87,7 +90,7 @@ class TimerScreen extends StatelessWidget {
                   ))
                 ]), // Margin
                 Expanded(
-                  child: Row(
+                  child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Visibility(
@@ -97,47 +100,46 @@ class TimerScreen extends StatelessWidget {
                         ),
                         Visibility(
                           visible: appSettings.playerCount > 5,
-                          child: const SizedBox(width: _widgetMargin),
+                          child: const SizedBox(height: _widgetMargin),
                         ),
                         Expanded(
-                          child: Column(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              _playerIndicator(
-                                  context, appModel, appSettings, 1),
-                              Visibility(
-                                visible: appSettings.playerCount > 2,
-                                child: const SizedBox(height: _widgetMargin),
-                              ),
                               Visibility(
                                 visible: appSettings.playerCount > 2,
                                 child: _playerIndicator(
                                     context, appModel, appSettings, 3),
                               ),
+                              Visibility(
+                                visible: appSettings.playerCount > 2,
+                                child: const SizedBox(width: _widgetMargin),
+                              ),
+                              _playerIndicator(
+                                  context, appModel, appSettings, 1),
                             ],
                           ),
                         ),
-                        const SizedBox(width: _widgetMargin),
+                        const SizedBox(height: _widgetMargin),
                         Visibility(
                           visible: appSettings.playerCount > 1,
                           child: Expanded(
-                            child: Column(
+                            child: Row(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
-                                Visibility(
-                                  visible: appSettings.playerCount > 1,
-                                  child: _playerIndicator(
-                                      context, appModel, appSettings, 2),
-                                ),
-                                Visibility(
-                                  visible: appSettings.playerCount > 3,
-                                  child: const SizedBox(height: _widgetMargin),
-                                ),
-                                // Margin
                                 Visibility(
                                   visible: appSettings.playerCount > 3,
                                   child: _playerIndicator(
                                       context, appModel, appSettings, 4),
+                                ),
+                                Visibility(
+                                  visible: appSettings.playerCount > 3,
+                                  child: const SizedBox(width: _widgetMargin),
+                                ),
+                                Visibility(
+                                  visible: appSettings.playerCount > 1,
+                                  child: _playerIndicator(
+                                      context, appModel, appSettings, 2),
                                 ),
                               ],
                             ),
@@ -146,7 +148,7 @@ class TimerScreen extends StatelessWidget {
 
                         Visibility(
                           visible: appSettings.playerCount > 4,
-                          child: const SizedBox(width: _widgetMargin),
+                          child: const SizedBox(height: _widgetMargin),
                         ),
                         Visibility(
                           visible: appSettings.playerCount > 4,
