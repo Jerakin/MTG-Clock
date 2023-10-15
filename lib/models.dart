@@ -81,7 +81,7 @@ class MyAppModel extends ChangeNotifier {
 
         // Add a second to the current player
         int current = playerTimers.putIfAbsent(currentPlayer, () => 0);
-        playerTimers.update(currentPlayer, (value) => current + 171);
+        playerTimers.update(currentPlayer, (value) => current + 1);
 
         // We don't need to notify our listeners when we pass turn as this is
         // called every 100ms. I wonder if we should refactor the timer into

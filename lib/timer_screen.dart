@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 import '/models.dart';
 
@@ -145,11 +146,15 @@ Widget playButtonContent(
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(appModel.getFormattedTime(appModel.totalTime()),
-            style: const TextStyle(fontSize: 30)),
-        Text("Total time",
+        AutoSizeText(appModel.getFormattedTime(appModel.totalTime(),),
+            maxLines: 1,
+            minFontSize: 15,
+            style: const TextStyle(fontSize: 50)),
+        AutoSizeText("Total",
+            maxFontSize: 20,
+            maxLines: 1,
             style:
-                TextStyle(color: Theme.of(context).disabledColor, fontSize: 15))
+                TextStyle(color: Theme.of(context).disabledColor, fontSize: 20))
       ],
     );
   }

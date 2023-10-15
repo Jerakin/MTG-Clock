@@ -45,22 +45,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _SingleSection(
               title: "General",
               children: [
-                _CustomListTile(
-                    title: "Players",
-                    icon: Icons.people,
-                    trailing: FittedBox(
-                      child: Row(children: [
-                        numberButton(context, appModel, appSettings, 2),
-                        const SizedBox(width: 5),
-                        numberButton(context, appModel, appSettings, 3),
-                        const SizedBox(width: 5),
-                        numberButton(context, appModel, appSettings, 4),
-                        const SizedBox(width: 5),
-                        numberButton(context, appModel, appSettings, 5),
-                        const SizedBox(width: 5),
-                        numberButton(context, appModel, appSettings, 6),
-                      ]),
-                    )),
+                const _CustomListTile(
+                  title: "Players",
+                  icon: Icons.people,
+                ),
+                Align(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      numberButton(context, appModel, appSettings, 2),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 3),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 4),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 5),
+                      const SizedBox(width: 5),
+                      numberButton(context, appModel, appSettings, 6),
+                    ]
+                  )
+                )
                 // _CustomListTile(
                 //   title: "Dark theme",
                 //   icon: Icons.dark_mode,
@@ -111,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             .apply(fontSizeFactor: 1.0),
                         value: appSettings.playerTimeLimit.inMinutes,
                         axis: Axis.horizontal,
-                        itemCount: 5,
+                        itemCount: 3,
                         minValue: 10,
                         maxValue: 240,
                         step: 5,
@@ -154,7 +158,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             .apply(fontSizeFactor: 1.0),
                         value: appSettings.tournamentTimeLimit.inMinutes,
                         axis: Axis.horizontal,
-                        itemCount: 5,
+                        itemCount: 3,
                         minValue: 10,
                         maxValue: 240,
                         step: 5,
@@ -188,13 +192,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _CustomListTile(
                   title: "About",
                   icon: Icons.info_outline_rounded,
-                  onTap: () async { await showOkCancelAlertDialog(
-                    context: context,
-                    okLabel: "Coffee",
-                    title: "About",
-                    message: "Created by Jerakin. Consider buy me a coffee if you enjoy the app.",
-                  ).then((value) => openKofi(value))
-                  ;},
+                  onTap: () async {
+                    await showOkCancelAlertDialog(
+                      context: context,
+                      cancelLabel: "Maybe later",
+                      okLabel: "Buy a Coffee",
+                      title: "About",
+                      message:
+                          "Created by @Jerakin. Consider buying me a coffee if you enjoy the app :)",
+                    ).then((value) => openKofi(value));
+                  },
                 ),
               ],
             ),
@@ -254,7 +261,7 @@ class _CustomListTile extends StatelessWidget {
       title: Text(title),
       leading: Icon(icon),
       trailing: trailing,
-      onTap: (){
+      onTap: () {
         if (onTap != null) onTap!();
       },
     );
