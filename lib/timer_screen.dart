@@ -13,7 +13,7 @@ class TimerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double pauseButtonDiameter =
-        min(MediaQuery.of(context).size.height, screenWidth) * 0.33;
+        min(MediaQuery.of(context).size.height, screenWidth) * 0.25;
 
     return Center(
       child: Stack(
@@ -123,28 +123,42 @@ class TimerScreen extends StatelessWidget {
                 ),
                 child:
                     Consumer<MyAppModel>(builder: (context, appModel, child) {
-                  return !Provider.of<MyAppModel>(context, listen: false)
-                          .isPaused
-                      ? Icon(
-                          Icons.pause_sharp,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          size: pauseButtonDiameter * 0.4,
-                        )
-                      : Container(
-                      child:Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                        Text(appModel.formatTimeSeconds(appModel.totalTime()), style: TextStyle(fontSize: 40)),
-                        Text("Total time", style: TextStyle(color:Theme.of(context).disabledColor,fontSize: 20))
-                      ],
-
-                  ));
+                  return playButtonContent(
+                      context, appModel, pauseButtonDiameter);
                 })),
           ),
         ],
       ),
     );
   }
+}
+
+Widget playButtonContent(
+    BuildContext context, MyAppModel appModel, pauseButtonDiameter) {
+  if (appModel.totalTime() <= 0) {
+    return Icon(
+      Icons.play_arrow_sharp, 
+      color: Theme.of(context).scaffoldBackgroundColor,
+      size: pauseButtonDiameter * 0.4,
+    );
+  } else if (appModel.isPaused) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(appModel.formatTimeSeconds(appModel.totalTime()),
+            style: TextStyle(fontSize: 30)),
+        Text("Total time",
+            style:
+                TextStyle(color: Theme.of(context).disabledColor, fontSize: 15))
+      ],
+    );
+  }
+
+  return Icon(
+    Icons.pause_sharp,
+    color: Theme.of(context).scaffoldBackgroundColor,
+    size: pauseButtonDiameter * 0.4,
+  );
 }
 
 Align timerBar(BuildContext context, MyAppModel appModel,
