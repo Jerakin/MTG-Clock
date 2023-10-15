@@ -81,7 +81,7 @@ class MyAppModel extends ChangeNotifier {
 
         // Add a second to the current player
         int current = playerTimers.putIfAbsent(currentPlayer, () => 0);
-        playerTimers.update(currentPlayer, (value) => current + 1);
+        playerTimers.update(currentPlayer, (value) => current + 171);
 
         // We don't need to notify our listeners when we pass turn as this is
         // called every 100ms. I wonder if we should refactor the timer into
@@ -93,7 +93,7 @@ class MyAppModel extends ChangeNotifier {
 
   String getFormattedTime(Duration duration, {includeMilliseconds = false}) {
     String isNegative = duration.isNegative ? '-' : '';
-    String outMin = (duration.inMinutes.remainder(60).abs()).toString().padLeft(2, '0');
+    String outMin = (duration.inMinutes.abs()).toString().padLeft(2, '0');
     String outSeconds = (duration.inSeconds.remainder(60).abs()).toString().padLeft(2, '0');
     String milliseconds =
         ((duration.inMilliseconds.remainder(1000).abs()) ~/ 10).toString().substring(0, 1);
