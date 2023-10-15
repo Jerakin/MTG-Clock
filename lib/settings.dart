@@ -109,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         textStyle: DefaultTextStyle.of(context)
                             .style
                             .apply(fontSizeFactor: 1.0),
-                        value: appSettings.playerTimeLimit,
+                        value: appSettings.playerTimeLimit.inMinutes,
                         axis: Axis.horizontal,
                         itemCount: 5,
                         minValue: 10,
@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         textStyle: DefaultTextStyle.of(context)
                             .style
                             .apply(fontSizeFactor: 1.0),
-                        value: appSettings.tournamentTimeLimit,
+                        value: appSettings.tournamentTimeLimit.inMinutes,
                         axis: Axis.horizontal,
                         itemCount: 5,
                         minValue: 10,

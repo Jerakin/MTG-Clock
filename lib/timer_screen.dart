@@ -135,9 +135,9 @@ class TimerScreen extends StatelessWidget {
 
 Widget playButtonContent(
     BuildContext context, MyAppModel appModel, pauseButtonDiameter) {
-  if (appModel.totalTime() <= 0) {
+  if (appModel.totalTime().inMilliseconds <= 0) {
     return Icon(
-      Icons.play_arrow_sharp, 
+      Icons.play_arrow_sharp,
       color: Theme.of(context).scaffoldBackgroundColor,
       size: pauseButtonDiameter * 0.4,
     );
@@ -145,7 +145,7 @@ Widget playButtonContent(
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(appModel.formatTimeSeconds(appModel.totalTime()),
+        Text(appModel.getFormattedTime(appModel.totalTime()),
             style: TextStyle(fontSize: 30)),
         Text("Total time",
             style:
@@ -170,7 +170,7 @@ Align timerBar(BuildContext context, MyAppModel appModel,
         child: SizedBox(
           width: _widgetMargin * 0.5,
           height:
-              screenWidth * (appModel.totalTime() / appSettings.getTotalTime()),
+              screenWidth * (appModel.totalTime().inSeconds / appSettings.getTotalTime().inSeconds),
           child: DecoratedBox(
               decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primary,
@@ -203,6 +203,13 @@ Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
     quarterTurns = 2;
   }
 
+  String timerText = "";
+  if (appSettings.selectedTimer == 1){
+    timerText = appModel.getFormattedTime(appSettings.playerTimeLimit - appModel.playerTime(playerNum), includeMilliseconds: true);
+  } else {
+    timerText = appModel.getPlayerTimeString(playerNum);
+  }
+
   return Expanded(
     child: InkWell(
       child: Container(
@@ -212,7 +219,7 @@ Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
             child: RotatedBox(
           quarterTurns: quarterTurns,
           child: Text(
-            appModel.getPlayerTimeString(playerNum),
+            timerText,
             style: playerTextStyle(context, appModel, appSettings, playerNum),
           ),
         )),
@@ -248,7 +255,7 @@ TextStyle playerTextStyle(BuildContext context, MyAppModel appModel,
 
   // TODO: appSettings.currentTimers[#] should be multiplied by 60
   if (appSettings.selectedTimer == 1) {
-    if (appModel.playerTime(thisPlayer) > appSettings.playerTimeLimit) {
+    if (appSettings.playerTimeLimit - appModel.playerTime(thisPlayer) <= const Duration()) {
       textColor = Theme.of(context).colorScheme.error;
     }
   } else if (appSettings.selectedTimer == 2) {

@@ -17,17 +17,17 @@ class MyAppModel extends ChangeNotifier {
     6: [0, 2, 5, 6, 3, 4, 1],
   };
 
-  int totalTime() {
+  Duration totalTime() {
     int total = 0;
     for (int i in playerTimers.values) {
       total += i;
     }
-    return Duration(milliseconds: total * 100).inSeconds;
+    return Duration(milliseconds: total * 100);
   }
 
-  int playerTime(player) {
+  Duration playerTime(player) {
     int v = playerTimers[player] ?? 0;
-    return Duration(milliseconds: v * 100).inSeconds;
+    return Duration(milliseconds: v * 100);
   }
 
   void reset() {
@@ -50,8 +50,8 @@ class MyAppModel extends ChangeNotifier {
     currentPlayer = i;
   }
 
-  String getPlayerTimeString(int i) {
-    return formatTimePlayers(playerTimers[i] ?? 0);
+  String getPlayerTimeString(int player) {
+    return getFormattedTime(playerTime(player), includeMilliseconds:true);
   }
 
   void passTurn(int player, int maxPlayers) {
@@ -91,38 +91,31 @@ class MyAppModel extends ChangeNotifier {
     );
   }
 
-  String formatTimeSeconds(value) {
-    final duration = Duration(seconds: value);
-    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
-
-    return '$minutes:$seconds';
-  }
-
-  String formatTimePlayers(value) {
-    final duration = Duration(milliseconds: value * 100);
-    String minutes = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+  String getFormattedTime(duration, {includeMilliseconds = false}) {
+    String outMin = (duration.inMinutes % 60).toString().padLeft(2, '0');
+    String outSeconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
     String milliseconds =
         ((duration.inMilliseconds % 1000) ~/ 10).toString().substring(0, 1);
-
-    return '$minutes:$seconds.$milliseconds';
+    if (includeMilliseconds){
+      return '$outMin:$outSeconds.$milliseconds';
+    }
+    return '$outMin:$outSeconds';
   }
 }
 
 class MyAppSettings extends ChangeNotifier {
   int playerCount = SimplePrefs.getPlayerCount() ?? 4;
   int selectedTimer = SimplePrefs.getSelectedTimer() ?? 2;
-  int playerTimeLimit = SimplePrefs.getPerPlayerTimeLimit() ?? 20;
-  int tournamentTimeLimit = SimplePrefs.getTournamentTimeLimit() ?? 90;
+  Duration playerTimeLimit = Duration(minutes: SimplePrefs.getPerPlayerTimeLimit() ?? 20);
+  Duration tournamentTimeLimit = Duration(minutes: SimplePrefs.getTournamentTimeLimit() ?? 90);
 
   Future<void> setPlayerTimeLimit(int time) async {
-    playerTimeLimit = time;
+    playerTimeLimit = Duration(minutes: time);
     SimplePrefs.setPerPlayerTimeLimit(time);
   }
 
   Future<void> setTournamentTimeLimit(int time) async {
-    tournamentTimeLimit = time;
+    tournamentTimeLimit = Duration(minutes: time);
     SimplePrefs.setTournamentTimeLimit(time);
   }
 
@@ -136,26 +129,17 @@ class MyAppSettings extends ChangeNotifier {
     SimplePrefs.setSelectedTimer(v);
   }
 
-  int getTotalTime() {
+  Duration getTotalTime() {
     if (selectedTimer == 1) {
       return playerTimeLimit * playerCount;
     } else if (selectedTimer == 2) {
       return tournamentTimeLimit;
     } else {
-      return 0;
+      return const Duration();
     }
   }
 
-  int maxTimePerPlayer() {
-    if (selectedTimer == 1) {
-      return playerTimeLimit * playerCount;
-    } else if (selectedTimer == 2) {
-      return tournamentTimeLimit;
-    }
-    return 0;
-  }
-
-  bool globalTimeReached(currentTotalTime) {
+  bool globalTimeReached(Duration currentTotalTime) {
     if (selectedTimer == 1) {
       return playerTimeLimit * playerCount <= currentTotalTime;
     } else if (selectedTimer == 2) {
