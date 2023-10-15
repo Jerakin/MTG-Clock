@@ -4,51 +4,10 @@ import 'package:provider/provider.dart';
 
 import '/models.dart';
 
+const double _widgetMargin = 8;
+
 class TimerScreen extends StatelessWidget {
   const TimerScreen({super.key});
-
-  static const double _widgetMargin = 8;
-
-  Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
-      MyAppSettings appSettings, playerNum) {
-    int quarterTurns = 0;
-    if (playerNum == 1) {
-      quarterTurns = 3;
-      if (appSettings.playerCount < 3) {
-        quarterTurns = 2;
-      }
-    } else if (playerNum == 2) {
-      quarterTurns = 3;
-      if (appSettings.playerCount < 4) {
-        quarterTurns = 0;
-      }
-    } else if (playerNum == 3) {
-      quarterTurns = 1;
-    } else if (playerNum == 4) {
-      quarterTurns = 1;
-    } else if (playerNum == 4) {
-      quarterTurns = 0;
-    } else if (playerNum == 6) {
-      quarterTurns = 2;
-    }
-
-    return Expanded(
-      child: InkWell(
-        child: Container(
-          decoration: playerButtonDecoration(
-              context, playerNum, appModel.currentPlayer),
-          child: Center(child: RotatedBox(
-            quarterTurns: quarterTurns,
-            child: Text(
-              appModel.getPlayerTimeString(playerNum),
-              style: playerTextStyle(context, appModel, appSettings, playerNum),
-            ),
-          )),
-        ),
-        onTap: () => appModel.passTurn(playerNum, appSettings.playerCount),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,34 +20,11 @@ class TimerScreen extends StatelessWidget {
         children: [
           Consumer2<MyAppModel, MyAppSettings>(
               builder: (context, appModel, appSettings, child) {
-            return Column(
+            return Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Stack(children: [
-                  const SizedBox(
-                    height: _widgetMargin * 4,
-                  ),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Visibility(
-                        visible: appSettings.selectedTimer != 3,
-                        child: SizedBox(
-                          height: _widgetMargin * 4,
-                          width: screenWidth *
-                              (appModel.totalTime() /
-                                  appSettings.getTotalTime()),
-                          child: DecoratedBox(
-                              decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary,
-                          )),
-                        ),
-                      )),
-                  Center(
-                      child: Text(
-                    appModel.formatTimeSeconds(appModel.totalTime()),
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ))
-                ]), // Margin
+                timerBar(context, appModel, appSettings, Alignment.bottomLeft,
+                    screenWidth),
                 Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -156,7 +92,9 @@ class TimerScreen extends StatelessWidget {
                               context, appModel, appSettings, 5),
                         ), // Margin
                       ]),
-                )
+                ),
+                timerBar(context, appModel, appSettings, Alignment.topRight,
+                    screenWidth)
               ],
             );
           }),
@@ -185,19 +123,89 @@ class TimerScreen extends StatelessWidget {
                 ),
                 child:
                     Consumer<MyAppModel>(builder: (context, appModel, child) {
-                  return Icon(
-                    Provider.of<MyAppModel>(context, listen: false).isPaused
-                        ? Icons.play_arrow_sharp
-                        : Icons.pause_sharp,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    size: pauseButtonDiameter * 0.4,
-                  );
+                  return !Provider.of<MyAppModel>(context, listen: false)
+                          .isPaused
+                      ? Icon(
+                          Icons.pause_sharp,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          size: pauseButtonDiameter * 0.4,
+                        )
+                      : Container(
+                      child:Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        Text(appModel.formatTimeSeconds(appModel.totalTime()), style: TextStyle(fontSize: 40)),
+                        Text("Total time", style: TextStyle(color:Theme.of(context).disabledColor,fontSize: 20))
+                      ],
+
+                  ));
                 })),
           ),
         ],
       ),
     );
   }
+}
+
+Align timerBar(BuildContext context, MyAppModel appModel,
+    MyAppSettings appSettings, Alignment alignment, screenWidth) {
+  return Align(
+      alignment: alignment,
+      child: Visibility(
+        visible: appSettings.selectedTimer != 3,
+        child: SizedBox(
+          width: _widgetMargin * 0.5,
+          height:
+              screenWidth * (appModel.totalTime() / appSettings.getTotalTime()),
+          child: DecoratedBox(
+              decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+          )),
+        ),
+      ));
+  // Margin
+}
+
+Expanded _playerIndicator(BuildContext context, MyAppModel appModel,
+    MyAppSettings appSettings, playerNum) {
+  int quarterTurns = 0;
+  if (playerNum == 1) {
+    quarterTurns = 3;
+    if (appSettings.playerCount < 3) {
+      quarterTurns = 2;
+    }
+  } else if (playerNum == 2) {
+    quarterTurns = 3;
+    if (appSettings.playerCount < 4) {
+      quarterTurns = 0;
+    }
+  } else if (playerNum == 3) {
+    quarterTurns = 1;
+  } else if (playerNum == 4) {
+    quarterTurns = 1;
+  } else if (playerNum == 4) {
+    quarterTurns = 0;
+  } else if (playerNum == 6) {
+    quarterTurns = 2;
+  }
+
+  return Expanded(
+    child: InkWell(
+      child: Container(
+        decoration:
+            playerButtonDecoration(context, playerNum, appModel.currentPlayer),
+        child: Center(
+            child: RotatedBox(
+          quarterTurns: quarterTurns,
+          child: Text(
+            appModel.getPlayerTimeString(playerNum),
+            style: playerTextStyle(context, appModel, appSettings, playerNum),
+          ),
+        )),
+      ),
+      onTap: () => appModel.passTurn(playerNum, appSettings.playerCount),
+    ),
+  );
 }
 
 EdgeInsets playerButtonEdge(thisPlayer) {
