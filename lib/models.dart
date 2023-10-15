@@ -91,15 +91,16 @@ class MyAppModel extends ChangeNotifier {
     );
   }
 
-  String getFormattedTime(duration, {includeMilliseconds = false}) {
-    String outMin = (duration.inMinutes % 60).toString().padLeft(2, '0');
-    String outSeconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
+  String getFormattedTime(Duration duration, {includeMilliseconds = false}) {
+    String isNegative = duration.isNegative ? '-' : '';
+    String outMin = (duration.inMinutes.remainder(60).abs()).toString().padLeft(2, '0');
+    String outSeconds = (duration.inSeconds.remainder(60).abs()).toString().padLeft(2, '0');
     String milliseconds =
-        ((duration.inMilliseconds % 1000) ~/ 10).toString().substring(0, 1);
+        ((duration.inMilliseconds.remainder(1000).abs()) ~/ 10).toString().substring(0, 1);
     if (includeMilliseconds){
-      return '$outMin:$outSeconds.$milliseconds';
+      return '$isNegative$outMin:$outSeconds.$milliseconds';
     }
-    return '$outMin:$outSeconds';
+    return '$isNegative$outMin:$outSeconds';
   }
 }
 

@@ -146,7 +146,7 @@ Widget playButtonContent(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(appModel.getFormattedTime(appModel.totalTime()),
-            style: TextStyle(fontSize: 30)),
+            style: const TextStyle(fontSize: 30)),
         Text("Total time",
             style:
                 TextStyle(color: Theme.of(context).disabledColor, fontSize: 15))
