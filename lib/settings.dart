@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 const _CustomListTile(
                   title: "Players",
-                  icon: Icons.people,
+                  icon: const Icon(Icons.people),
                 ),
                 Align(
                   child: Row(
@@ -64,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       numberButton(context, appModel, appSettings, 6),
                     ]
                   )
-                )
+                ),
                 // _CustomListTile(
                 //   title: "Dark theme",
                 //   icon: Icons.dark_mode,
@@ -81,11 +81,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const Divider(),
             _SingleSection(
-              title: "Timer styles",
+              title: "Timers",
               children: [
                 _CustomListTile(
                     title: "Per Player",
-                    icon: Icons.person,
+                    icon: const Icon(Icons.person),
                     subtitleWidget: Visibility(
                         visible: appSettings.selectedTimer == 1,
                         child: const Text(
@@ -128,7 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     )),
                 _CustomListTile(
                     title: "Total Time",
-                    icon: Icons.watch_later_outlined,
+                    icon: const Icon(Icons.watch_later_outlined),
                     subtitleWidget: Visibility(
                         visible: appSettings.selectedTimer == 2,
                         child: const Text(
@@ -171,7 +171,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     )),
                 _CustomListTile(
                     title: "Stopwatch",
-                    icon: Icons.timer_sharp,
+                    icon: const Icon(Icons.timer_sharp),
                     subtitleWidget: Visibility(
                         visible: appSettings.selectedTimer == 3,
                         child: const Text(
@@ -184,6 +184,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             appSettings.setSelectedTimerStyle(3);
                           });
                         })),
+                _CustomListTile(
+                  title: "Reset timers",
+                  onTap:   () async {
+                    await showOkCancelAlertDialog(
+                      context: context,
+                      title: 'Warning',
+                      message: 'This will reset the current game.',
+                    ).then((result) => dialogCallback(result, appModel, appSettings, appSettings.playerCount));},
+                ),
+
               ],
             ),
             const Divider(),
@@ -191,7 +201,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 _CustomListTile(
                   title: "About",
-                  icon: Icons.info_outline_rounded,
+                  icon: const Icon(Icons.info_outline_rounded),
                   onTap: () async {
                     await showOkCancelAlertDialog(
                       context: context,
@@ -241,14 +251,14 @@ ElevatedButton numberButton(BuildContext context, MyAppModel appModel,
 class _CustomListTile extends StatelessWidget {
   final String title;
   final Widget? subtitleWidget;
-  final IconData icon;
+  final Icon? icon;
   final Widget? trailing;
   final Function? onTap;
 
   const _CustomListTile(
       {Key? key,
       required this.title,
-      required this.icon,
+      this.icon,
       this.trailing,
       this.subtitleWidget,
       this.onTap})
@@ -259,7 +269,7 @@ class _CustomListTile extends StatelessWidget {
     return ListTile(
       subtitle: subtitleWidget,
       title: Text(title),
-      leading: Icon(icon),
+      leading: icon,
       trailing: trailing,
       onTap: () {
         if (onTap != null) onTap!();
