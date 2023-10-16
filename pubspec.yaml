@@ -29,7 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   provider:
-  numberpicker: ^2.1.2
+  numberpicker:
+    path: ../NumberPicker
   adaptive_dialog: ^1.9.0+2
   shared_preferences:
   url_launcher:

@@ -227,10 +227,9 @@ packages:
   numberpicker:
     dependency: "direct main"
     description:
-      name: numberpicker
-      sha256: "4c129154944b0f6b133e693f8749c3f8bfb67c4d07ef9dcab48b595c22d1f156"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../NumberPicker"
+      relative: true
+    source: path
     version: "2.1.2"
   path:
     dependency: transitive
